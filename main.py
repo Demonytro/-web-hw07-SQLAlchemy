@@ -65,7 +65,9 @@ def select_3():
                         func.round(func.avg(Grade.grade), 2).label('avg_grade'))\
                     .select_from(Grade).join(Discipline).join(Student).join(Group)\
                     .filter(Discipline.id == 2)\
-                    .group_by(Group.id).order_by(desc('avg_grade')).all()
+                    .group_by(Group.id, Discipline.name).order_by(desc('avg_grade')).all()
+    #       так не работало              .group_by(Group.id).order_by(desc('avg_grade')).all()
+
     return result
 
 def select_4():
@@ -160,7 +162,8 @@ def select_8():
                         func.round(func.avg(Grade.grade), 2).label('avg_grade'))\
                     .select_from(Grade).join(Discipline).join(Teacher)\
                     .filter(Teacher.id == 4)\
-                    .group_by(Discipline.id).all()
+                    .group_by(Teacher.fullname, Discipline.id).all()
+#     так не работало  -        .group_by(Discipline.id).all()
 
     return result
 
@@ -223,15 +226,10 @@ def select_11():
                         .join(Student).join(Discipline).join(Teacher)\
                         .filter(and_(
                             Student.id == 3, Teacher.id == 3
-                        )).all()
+                        )).group_by(Teacher.id, Student.fullname).all()
 
-    # result = session.query(Student.id, Student.fullname, Grade.grade, Grade.date_of)\
-    #                 .select_from(Grade)\
-    #                 .join(Student)\
-    #                 .filter(and_(
-    #                     Grade.discipline_id == 3, Student.group_id == 3, Grade.date_of == subquery
-    #                 ))\
-    #                 .group_by(Student.id, Discipline.name).order_by(desc('avg_grade')).limit(1).first()
+#     так не работало              )).all()
+
     return result
 
 
@@ -265,14 +263,14 @@ def select_12():
 if __name__ == '__main__':
     # print(select_one())
     # print(select_two())
-    # print(select_3()) # not worked
+    print(select_3()) # not worked
     # print(select_4())
     # print(select_5())
     # print(select_6())
     # print(select_7())
     # print(select_8()) # not worked
     # print(select_9())
-    # print(select_10()) # working - а как такое может быть 0-0
-    print(select_11()) # not worked
+    print(select_10()) # working - а как такое может быть 0-0
+    # print(select_11()) # not worked
     # print(select_12())
 
